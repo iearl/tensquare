@@ -6,14 +6,14 @@ import java.util.List;
  * 返回结果集合，分页时使用
  * @param <T>
  */
-public class PaggResult<T> {
+public class PageResult<T> {
     private long total;
     private List<T> rows;
 
-    public PaggResult() {
+    public PageResult() {
     }
 
-    public PaggResult(long total, List<T> rows) {
+    public PageResult(long total, List<T> rows) {
         this.total = total;
         this.rows = rows;
     }

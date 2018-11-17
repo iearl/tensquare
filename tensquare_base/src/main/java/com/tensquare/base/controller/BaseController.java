@@ -2,10 +2,14 @@ package com.tensquare.base.controller;
 
 import com.tensquare.base.pojo.Label;
 import com.tensquare.base.service.LabelService;
+import eneity.PageResult;
 import eneity.Result;
 import eneity.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  *  跨域是什么？浏览器从一个域名的网页去请求另一个域名的资源时，域名、端口、 协议任一不同，都是跨域 。
@@ -40,7 +44,7 @@ public class BaseController {
     @RequestMapping(value = "/{labelId}",method = RequestMethod.PUT)
     public Result update(@PathVariable String labelId, @RequestBody Label label){
         label.setId(labelId);
-        labelService.save(label);
+        labelService.update(label);
         return new Result(true, StatusCode.OK,"label修改成功");
     }
 
@@ -48,6 +52,18 @@ public class BaseController {
     public Result delete(@PathVariable String labelId){
         labelService.delete(labelId);
         return new Result(true, StatusCode.OK,"label删除成功");
+    }
+
+    @RequestMapping(value = "/search",method = RequestMethod.POST)
+    public Result findSearch(@RequestBody Label label){
+        List<Label> list = labelService.findSearch(label);
+        return new Result(true, StatusCode.OK,"label查询成功",list);
+    }
+
+    @RequestMapping(value = "/search/{page}/{size}",method = RequestMethod.POST)
+    public Result pageQuray(@RequestBody Label label, @PathVariable int page, @PathVariable int size){
+        Page<Label> pageData = labelService.pageQuray(label,page,size);
+        return new Result(true, StatusCode.OK,"label查询成功",new PageResult<Label>(pageData.getTotalElements(),pageData.getContent()));
     }
 
 }
